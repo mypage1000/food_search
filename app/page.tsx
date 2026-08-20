@@ -59,48 +59,55 @@ export default function HomePage() {
 
   return (
     <main className="page">
-      <header className="header">
-        <h1>전국 시티투어 맛집 지도 — 1차(필터·리스트)</h1>
-        <p className="subtitle">지역과 음식 종류를 골라 맛집을 찾아보세요.</p>
-      </header>
-
-      <section className="region-picker" aria-label="지역 선택">
-        <div className="field">
-          <label htmlFor="sigungu-select">구·군 ({sido.label})</label>
-          <select
-            id="sigungu-select"
-            value={sigunguCode}
-            onChange={(e) => setSigunguCode(e.target.value)}
-          >
-            <option value="">전체</option>
-            {sido.sigungu.map((g) => (
-              <option key={g.code} value={g.code}>
-                {g.label}
-              </option>
-            ))}
-          </select>
-        </div>
+      <section className="hero">
+        <header className="header">
+          <span className="hero-badge">전국 시티투어</span>
+          <h1>다음 여행지에서, 오늘 뭐 먹지?</h1>
+          <p className="subtitle">지역과 음식 종류를 골라 맛집을 찾아보세요.</p>
+        </header>
       </section>
 
-      <section className="category-filter" aria-label="음식 카테고리 필터">
-        {FOOD_CATEGORIES.map((category) => {
-          const count = categoryCounts[category] ?? 0;
-          const active = selectedCategories.includes(category);
-          const disabled = count === 0;
-          return (
-            <button
-              key={category}
-              type="button"
-              className="chip"
-              aria-pressed={active}
-              disabled={disabled}
-              data-active={active}
-              onClick={() => toggleCategory(category)}
+      <section className="search-panel" aria-label="맛집 검색">
+        <p className="search-panel-title">어디로 떠나볼까요?</p>
+
+        <div className="region-picker" aria-label="지역 선택">
+          <div className="field">
+            <label htmlFor="sigungu-select">구·군 ({sido.label})</label>
+            <select
+              id="sigungu-select"
+              value={sigunguCode}
+              onChange={(e) => setSigunguCode(e.target.value)}
             >
-              {category} {count}
-            </button>
-          );
-        })}
+              <option value="">전체</option>
+              {sido.sigungu.map((g) => (
+                <option key={g.code} value={g.code}>
+                  {g.label}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+
+        <div className="category-filter" aria-label="음식 카테고리 필터">
+          {FOOD_CATEGORIES.map((category) => {
+            const count = categoryCounts[category] ?? 0;
+            const active = selectedCategories.includes(category);
+            const disabled = count === 0;
+            return (
+              <button
+                key={category}
+                type="button"
+                className="chip"
+                aria-pressed={active}
+                disabled={disabled}
+                data-active={active}
+                onClick={() => toggleCategory(category)}
+              >
+                {category} {count}
+              </button>
+            );
+          })}
+        </div>
       </section>
 
       <section className="result-list" aria-label="맛집 목록">
