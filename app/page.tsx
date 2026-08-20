@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { findSido, findSigungu } from "@/lib/regions";
 import { FOOD_CATEGORIES, type FoodCategory } from "@/lib/categories";
@@ -64,6 +65,9 @@ export default function HomePage() {
           <span className="hero-badge">전국 시티투어</span>
           <h1>다음 여행지에서, 오늘 뭐 먹지?</h1>
           <p className="subtitle">지역과 음식 종류를 골라 맛집을 찾아보세요.</p>
+          <Link href="/search" className="search-button">
+            실시간으로 맛집 검색하기
+          </Link>
         </header>
       </section>
 
