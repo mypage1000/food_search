@@ -1,0 +1,74 @@
+# ─────────────────────────────────────────────
+#  city-tour-food-map / .gitignore
+#  ※ 환경변수 블록은 절대 지우지 말 것 (PRD §5 S-09)
+# ─────────────────────────────────────────────
+
+# ── 환경변수 · 인증키 (최우선) ──
+.env
+.env.*
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+# 예시 파일은 예외적으로 추적한다 (값은 반드시 비어 있어야 함)
+!.env.example
+!.env.local.example
+
+# 키가 섞이기 쉬운 파일들
+*.pem
+*.key
+secrets.json
+serviceAccount*.json
+
+# ── 의존성 ──
+node_modules/
+.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+
+# ── Next.js 빌드 산출물 ──
+.next/
+out/
+build/
+dist/
+next-env.d.ts
+
+# ── 테스트 · 커버리지 ──
+coverage/
+*.lcov
+
+# ── 배포 ──
+.vercel
+
+# ── 캐시 ──
+.turbo/
+.eslintcache
+*.tsbuildinfo
+
+# ── 로그 ──
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# ── 에디터 · OS ──
+.vscode/*
+!.vscode/extensions.json
+.idea/
+.claude/
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ── 이 프로젝트 고유 ──
+# API 원본 응답 덤프 (개발 중 저장한 것. 키가 URL에 섞여 있을 수 있음)
+/data/raw/
+/tmp/
+
+# ※ data/geocode-cache.json 은 커밋한다 (PRD §4.4)
+#   공개 주소와 좌표만 들어가므로 안전하며, 배포 환경에서 재사용된다.
