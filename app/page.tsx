@@ -3,7 +3,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { findSido, findSigungu } from "@/lib/regions";
 import { FOOD_CATEGORIES, type FoodCategory } from "@/lib/categories";
-import { mockFoodSource } from "@/lib/sources/food/mock";
 import type { Restaurant } from "@/lib/sources/food/types";
 
 // 시/도는 서울특별시로 고정한다 (구·군만 선택 가능).
@@ -18,14 +17,17 @@ export default function HomePage() {
 
   const sigungu = sigunguCode ? findSigungu(sido.code, sigunguCode) : null;
 
-  // F-04: 서울(고정 시/도) 기준으로 데이터를 가져온다.
+  // F-04: 서울(고정 시/도) 기준으로 서버 라우트(/api/region)에서 데이터를 가져온다.
+  // 브라우저는 KAKAO_REST_API_KEY 등 서버 전용 키를 절대 알지 못한다 (S-05).
   useEffect(() => {
     let cancelled = false;
     setLoading(true);
-    mockFoodSource
-      .fetchByRegion({ sido, sigungu: sigungu ?? null })
-      .then((result) => {
-        if (!cancelled) setRestaurants(result);
+    const params = new URLSearchParams({ sido: sido.code });
+    if (sigungu) params.set("sigungu", sigungu.code);
+    fetch(`/api/region?${params.toString()}`)
+      .then((res) => res.json())
+      .then((data: { restaurants?: Restaurant[] }) => {
+        if (!cancelled) setRestaurants(data.restaurants ?? []);
       })
       .finally(() => {
         if (!cancelled) setLoading(false);
