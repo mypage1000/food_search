@@ -9,67 +9,86 @@ body {
 }
 
 body {
-  font-family: -apple-system, "Pretendard", "Noto Sans KR", sans-serif;
-  color: #1a1c1d;
-  background: #f9f9fa;
+  font-family: "Pretendard", -apple-system, "Noto Sans KR", system-ui, sans-serif;
+  color: #191f28;
+  background: #f2f4f6;
   font-size: 16px;
   line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
 }
 
 .page {
   max-width: 720px;
   margin: 0 auto;
-  padding: 16px;
+  padding: 24px 20px 48px;
 }
 
 .header h1 {
-  font-size: 20px;
-  margin: 0 0 4px;
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin: 0 0 6px;
+  color: #191f28;
 }
 
 .subtitle {
-  margin: 0 0 20px;
-  color: #4c4546;
+  margin: 0 0 24px;
+  color: #8b95a1;
   font-size: 14px;
+  font-weight: 500;
 }
 
 .region-picker {
   display: flex;
   gap: 12px;
   flex-wrap: wrap;
-  margin-bottom: 12px;
+  margin-bottom: 16px;
+  background: #fff;
+  padding: 16px;
+  border-radius: 16px;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04), 0 2px 8px rgba(15, 23, 42, 0.04);
 }
 
 .field {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 6px;
   flex: 1 1 160px;
 }
 
 .field label {
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 600;
-  color: #4c4546;
+  color: #4e5968;
 }
 
 .field select {
   min-height: 44px;
-  padding: 0 12px;
-  border: 1px solid #cfc4c5;
-  border-radius: 6px;
-  font-size: 16px;
+  padding: 0 14px;
+  border: none;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 500;
+  color: #191f28;
+  background: #f2f4f6;
+  transition: box-shadow 0.15s ease, background 0.15s ease;
+}
+
+.field select:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(49, 130, 246, 0.25);
   background: #fff;
 }
 
 .field select:disabled {
-  background: #eeeeef;
-  color: #7e7576;
+  background: #f2f4f6;
+  color: #b0b8c1;
 }
 
 .notice {
-  color: #4c4546;
+  color: #8b95a1;
   font-size: 14px;
+  font-weight: 500;
   margin: 8px 0;
 }
 
@@ -77,10 +96,16 @@ body {
   margin-left: 8px;
   border: none;
   background: none;
-  color: #000;
-  text-decoration: underline;
+  color: #3182f6;
+  text-decoration: none;
+  font-weight: 600;
   cursor: pointer;
   font-size: 14px;
+}
+
+.link-button:hover {
+  color: #1b64da;
+  text-decoration: underline;
 }
 
 .category-filter {
@@ -88,36 +113,56 @@ body {
   gap: 8px;
   overflow-x: auto;
   padding-bottom: 8px;
-  margin-bottom: 16px;
+  margin-bottom: 20px;
 }
 
 .chip {
-  min-height: 44px;
-  padding: 0 16px;
+  min-height: 40px;
+  padding: 0 18px;
   border-radius: 9999px;
-  border: 1px solid #cfc4c5;
+  border: none;
   background: #fff;
+  color: #4e5968;
   font-size: 14px;
+  font-weight: 600;
   white-space: nowrap;
   cursor: pointer;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.06), inset 0 0 0 1px rgba(15, 23, 42, 0.05);
+  transition: background 0.15s ease, color 0.15s ease, box-shadow 0.15s ease, transform 0.1s ease;
+}
+
+.chip:hover:not(:disabled) {
+  background: #eef3ff;
+  color: #3182f6;
+}
+
+.chip:active:not(:disabled) {
+  transform: scale(0.97);
 }
 
 .chip[data-active="true"] {
-  background: #000;
+  background: #3182f6;
   color: #fff;
-  border-color: #000;
+  box-shadow: 0 4px 10px rgba(49, 130, 246, 0.32);
+}
+
+.chip[data-active="true"]:hover:not(:disabled) {
+  background: #1b64da;
+  color: #fff;
 }
 
 .chip:disabled {
-  color: #b0b0b0;
-  border-color: #e2e2e3;
+  color: #b0b8c1;
+  background: #f2f4f6;
+  box-shadow: none;
   cursor: not-allowed;
 }
 
 .result-header {
-  font-size: 14px;
-  font-weight: 600;
-  margin-bottom: 8px;
+  font-size: 15px;
+  font-weight: 700;
+  color: #191f28;
+  margin-bottom: 12px;
 }
 
 .restaurant-list {
@@ -130,10 +175,16 @@ body {
 }
 
 .restaurant-card {
-  border: 1px solid #e4e4e7;
-  border-radius: 8px;
-  padding: 16px;
+  border: none;
+  border-radius: 16px;
+  padding: 18px 20px;
   background: #fff;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04), 0 4px 12px rgba(15, 23, 42, 0.05);
+  transition: box-shadow 0.15s ease, transform 0.15s ease;
+}
+
+.restaurant-card:hover {
+  box-shadow: 0 2px 4px rgba(15, 23, 42, 0.06), 0 8px 20px rgba(15, 23, 42, 0.08);
 }
 
 .restaurant-main {
@@ -145,26 +196,31 @@ body {
 
 .restaurant-name {
   font-weight: 700;
-  font-size: 16px;
+  font-size: 17px;
+  letter-spacing: -0.01em;
+  color: #191f28;
 }
 
 .badge {
   font-size: 12px;
-  padding: 2px 8px;
-  border-radius: 4px;
-  background: #f4f4f5;
-  color: #1a1c1d;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  background: #e8f3ff;
+  color: #3182f6;
   white-space: nowrap;
 }
 
 .restaurant-address {
-  margin: 6px 0 0;
+  margin: 8px 0 0;
   font-size: 14px;
-  color: #4c4546;
+  font-weight: 500;
+  color: #8b95a1;
 }
 
 .restaurant-menu {
   margin: 4px 0 0;
   font-size: 14px;
-  color: #4c4546;
+  font-weight: 500;
+  color: #8b95a1;
 }

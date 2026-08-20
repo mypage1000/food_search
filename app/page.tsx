@@ -1,35 +1,25 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { SIDO_LIST, findSido, findSigungu } from "@/lib/regions";
+import { findSido, findSigungu } from "@/lib/regions";
 import { FOOD_CATEGORIES, type FoodCategory } from "@/lib/categories";
 import { mockFoodSource } from "@/lib/sources/food/mock";
 import type { Restaurant } from "@/lib/sources/food/types";
 
+// 시/도는 서울특별시로 고정한다 (구·군만 선택 가능).
+const FIXED_SIDO_CODE = "11";
+
 export default function HomePage() {
-  const [sidoCode, setSidoCode] = useState<string>("");
+  const sido = findSido(FIXED_SIDO_CODE)!;
   const [sigunguCode, setSigunguCode] = useState<string>(""); // "" = 전체
   const [selectedCategories, setSelectedCategories] = useState<FoodCategory[]>([]);
   const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
   const [loading, setLoading] = useState(false);
 
-  const sido = sidoCode ? findSido(sidoCode) : undefined;
-  const sigungu = sido && sigunguCode ? findSigungu(sido.code, sigunguCode) : null;
-  const regionConfirmed = Boolean(sido);
+  const sigungu = sigunguCode ? findSigungu(sido.code, sigunguCode) : null;
 
-  // R-14: 시/도를 바꾸면 구·군·카테고리 선택을 초기화한다.
-  function handleSidoChange(nextCode: string) {
-    setSidoCode(nextCode);
-    setSigunguCode("");
-    setSelectedCategories([]);
-  }
-
-  // F-04: 지역이 확정된 뒤에만 데이터를 가져온다.
+  // F-04: 서울(고정 시/도) 기준으로 데이터를 가져온다.
   useEffect(() => {
-    if (!sido) {
-      setRestaurants([]);
-      return;
-    }
     let cancelled = false;
     setLoading(true);
     mockFoodSource
@@ -74,31 +64,14 @@ export default function HomePage() {
 
       <section className="region-picker" aria-label="지역 선택">
         <div className="field">
-          <label htmlFor="sido-select">시/도</label>
-          <select
-            id="sido-select"
-            value={sidoCode}
-            onChange={(e) => handleSidoChange(e.target.value)}
-          >
-            <option value="">시/도를 선택해 주세요</option>
-            {SIDO_LIST.map((s) => (
-              <option key={s.code} value={s.code}>
-                {s.label}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        <div className="field">
-          <label htmlFor="sigungu-select">구·군</label>
+          <label htmlFor="sigungu-select">구·군 ({sido.label})</label>
           <select
             id="sigungu-select"
             value={sigunguCode}
-            disabled={!sido}
             onChange={(e) => setSigunguCode(e.target.value)}
           >
             <option value="">전체</option>
-            {sido?.sigungu.map((g) => (
+            {sido.sigungu.map((g) => (
               <option key={g.code} value={g.code}>
                 {g.label}
               </option>
@@ -107,21 +80,11 @@ export default function HomePage() {
         </div>
       </section>
 
-      {!regionConfirmed && (
-        <p className="notice" role="status">
-          시/도를 먼저 선택해 주세요.
-        </p>
-      )}
-
-      <section
-        className="category-filter"
-        aria-label="음식 카테고리 필터"
-        aria-disabled={!regionConfirmed}
-      >
+      <section className="category-filter" aria-label="음식 카테고리 필터">
         {FOOD_CATEGORIES.map((category) => {
           const count = categoryCounts[category] ?? 0;
           const active = selectedCategories.includes(category);
-          const disabled = !regionConfirmed || count === 0;
+          const disabled = count === 0;
           return (
             <button
               key={category}
@@ -132,7 +95,7 @@ export default function HomePage() {
               data-active={active}
               onClick={() => toggleCategory(category)}
             >
-              {category} {regionConfirmed ? count : ""}
+              {category} {count}
             </button>
           );
         })}
@@ -140,17 +103,15 @@ export default function HomePage() {
 
       <section className="result-list" aria-label="맛집 목록">
         <div className="result-header">
-          {regionConfirmed && (
-            <span>
-              {sido!.label}
-              {sigungu ? ` · ${sigungu.label}` : " · 전체"} — 총 {filteredRestaurants.length}곳
-            </span>
-          )}
+          <span>
+            {sido.label}
+            {sigungu ? ` · ${sigungu.label}` : " · 전체"} — 총 {filteredRestaurants.length}곳
+          </span>
         </div>
 
         {loading && <p className="notice">불러오는 중...</p>}
 
-        {!loading && regionConfirmed && filteredRestaurants.length === 0 && (
+        {!loading && filteredRestaurants.length === 0 && (
           <p className="notice">
             조건에 맞는 맛집이 없습니다.
             {selectedCategories.length > 0 && (
